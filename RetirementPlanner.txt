@@ -1,0 +1,51 @@
+Current retirement savings ($)
+currentSavings
+0
+
+Expected annual savings ($)	
+annualSavings
+0
+ 
+Expected annual inflation (%)	
+inflation
+3%
+
+Expected salary annual increase (%)	
+salaryIncrease
+3%
+ 
+Years of retirement income	
+yearsOfRetirement
+35
+
+Expected investment return (%)	
+roi
+5%
+
+
+Years to retirement
+yearsOfWork
+10
+- OR -
+Income at retirement($)	
+incomeAtRetirement
+20k
+
+
+Create array of 
+yearsToRetirement + YearsOfRetirementIncome
+
+ Graph showing:
+ - Accumulated Savings
+ - Accumulated Interest
+
+ 
+ 
+currentSavings
+annualSavings
+inflation
+salaryIncrease
+yearsOfRetirement
+roi
+yearsOfWork
+incomeAtRetirement
