@@ -77,7 +77,129 @@ function calc()
 
 	console.log(results);
 	
-	$('#graphContainer').highcharts({
+	// update graph
+	chart.xAxis[0].removePlotBand('workPB');
+	chart.xAxis[0].removePlotBand('retirementPB');
+	
+	chart.xAxis[0].addPlotBand({
+				from: 0,
+                to: yearsOfWork,
+                color: '#400000',
+                label: {
+                    text: 'Work',
+                    style: {
+                        color: '#999999'
+                    },
+                    y: 100
+                }
+	});
+	
+	chart.xAxis[0].addPlotBand({
+				id: 'retirementPB',
+                from: yearsOfWork,
+                to: 1000,
+                color: '#141F1F',
+                label: {
+                    text: 'Retirement',
+                    style: {
+                        color: '#999999'
+                    },
+                    y: 20
+                }
+	});
+	
+	chart.series[0].update({
+		data: results.map(function(obj){
+				return Math.round(obj.totalCapital);
+		})
+	}, false); //true / false to redraw
+	
+	chart.series[1].update({
+		data: results.map(function(obj){
+				return Math.round(obj.thisYearSavings);
+		})
+	}, false); //true / false to redraw
+	
+	chart.series[2].update({
+		data: results.map(function(obj){
+				return Math.round(obj.thisYearSpendings);
+		})
+	}, false); //true / false to redraw
+	
+	chart.series[3].update({
+		data: results.map(function(obj){
+				return Math.round(obj.thisYearROI);
+		})
+	}, false); //true / false to redraw
+	
+	chart.series[4].update({
+		data: results.map(function(obj){
+				return Math.round(obj.totalCapitalIncome);
+		})
+	}, true); //true / false to redraw
+}
+
+document.getElementById('currentSavings').onchange = calc;
+document.getElementById('annualSavings').onchange = calc;
+document.getElementById('inflation').onchange = calc;
+// document.getElementById('savingsIncrease').onchange = calc;
+// document.getElementById('yearsOfRetirement').onchange = calc;
+document.getElementById('roi').onchange = calc;
+document.getElementById('yearsOfWork').onchange = calc;
+document.getElementById('incomeAtRetirement').onchange = calc;
+
+$('#currentSavings').priceFormat({
+    prefix: '$ ',
+    thousandsSeparator: ',',
+	centsLimit: 0
+});
+
+$('#annualSavings').priceFormat({
+    prefix: '$ ',
+    thousandsSeparator: ',',
+	centsLimit: 0
+});
+
+// $('#inflation').priceFormat({
+	// prefix: '',
+    // suffix: '% ',
+	// centsLimit: 0
+// });
+
+// $('#savingsIncrease').priceFormat({
+	// prefix: '',
+    // suffix: '% ',
+	// centsLimit: 0
+// });
+
+// $('#roi').priceFormat({
+	// prefix: '',
+    // suffix: '% ',
+	// centsLimit: 0
+// });
+
+$('#incomeAtRetirement').priceFormat({
+    prefix: '$ ',
+    thousandsSeparator: ',',
+	centsLimit: 0
+});
+
+
+// $(".percent").mask('##0.00%', {reverse: true});
+
+$(".percent").on("blur", function() {
+	var jObj = $(this);
+	var jVal = jObj.val();
+	jObj.val((jVal.length === 1) ? jVal + '%' : jVal);
+});
+
+
+// create graph
+var chart = new Highcharts.Chart({
+// = $('#graphContainer').highcharts({
+		chart: {
+			renderTo: "graphContainer",
+		},
         title: {
             text: 'Retirement Capital'
         },
@@ -86,12 +208,13 @@ function calc()
                 text: 'Years'
             },
 			allowDecimals: false,
-            categories: Array.apply(null, {length: N}).map(Number.call, Number),
+            // categories: Array.apply(null, {length: N}).map(Number.call, Number),
             tickmarkPlacement: 'on',
             title: {
                 enabled: false
             },
 			plotBands: [{
+				id: 'workPB',
                 from: 0,
                 to: yearsOfWork,
                 color: '#FFE6E6',
@@ -103,6 +226,7 @@ function calc()
                     y: 100
                 }
 				}, {
+				id: 'retirementPB',
                 from: yearsOfWork,
                 to: 1000,
                 color: '#FCFFFB',
@@ -181,61 +305,5 @@ function calc()
 			visible: false
         }]
     });
-}
-
-document.getElementById('currentSavings').onchange = calc;
-document.getElementById('annualSavings').onchange = calc;
-document.getElementById('inflation').onchange = calc;
-// document.getElementById('savingsIncrease').onchange = calc;
-// document.getElementById('yearsOfRetirement').onchange = calc;
-document.getElementById('roi').onchange = calc;
-document.getElementById('yearsOfWork').onchange = calc;
-document.getElementById('incomeAtRetirement').onchange = calc;
-
-$('#currentSavings').priceFormat({
-    prefix: '$ ',
-    thousandsSeparator: ',',
-	centsLimit: 0
-});
-
-$('#annualSavings').priceFormat({
-    prefix: '$ ',
-    thousandsSeparator: ',',
-	centsLimit: 0
-});
-
-// $('#inflation').priceFormat({
-	// prefix: '',
-    // suffix: '% ',
-	// centsLimit: 0
-// });
-
-// $('#savingsIncrease').priceFormat({
-	// prefix: '',
-    // suffix: '% ',
-	// centsLimit: 0
-// });
-
-// $('#roi').priceFormat({
-	// prefix: '',
-    // suffix: '% ',
-	// centsLimit: 0
-// });
-
-$('#incomeAtRetirement').priceFormat({
-    prefix: '$ ',
-    thousandsSeparator: ',',
-	centsLimit: 0
-});
-
-
-// $(".percent").mask('##0.00%', {reverse: true});
-
-$(".percent").on("blur", function() {
-	var jObj = $(this);
-	var jVal = jObj.val();
-	jObj.val((jVal.length === 1) ? jVal + '%' : jVal);
-});
-
 
 calc();
